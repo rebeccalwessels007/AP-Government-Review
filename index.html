@@ -1,1 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AP Government & Politics Review</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --navy: #0d1b2a;
+      --cream: #f5f0e8;
+      --gold: #c9a84c;
+      --red: #9b2335;
+      --blue: #1a3a5c;
+      --light-blue: #2e6da4;
+      --muted: #6b7280;
+      --card-bg: #ffffff;
+      --border: #ddd5c8;
+    }
 
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--cream);
+      color: var(--navy);
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
+    /* HEADER */
+    header {
+      background: var(--navy);
+      color: var(--cream);
+      padding: 3rem 2rem 2.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 48px,
+        rgba(201,168,76,0.07) 48px,
+        rgba(201,168,76,0.07) 50px
+      );
+      pointer-events: none;
+    }
+
+    header .stars {
+      letter-spacing: 0.6rem;
+      font-size: 0.75rem;
+      color: var(--gold);
+      opacity: 0.8;
+      margin-bottom: 0.5rem;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+
+    header h1 span { color: var(--gold); }
+
+    header p {
+      margin-top: 0.75rem;
+      font-size: 1rem;
+      color: rgba(245,240,232,0.65);
+      font-style: italic;
+    }
+
+    .exam-badge {
+      display: inline-block;
+      margin-top: 1.25rem;
+      background: var(--red);
+      color: white;
+      padding: 0.35rem 1.1rem;
+      font-size: 0.75rem;
+      font-family: 'Source Serif 4', serif;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 2px;
+    }
+
+    /* NAV TABS */
+    nav {
+      background: var(--blue);
+      display: flex;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    nav::-webkit-scrollbar { display: none; }
+
+    nav button {
+      flex-shrink: 0;
+      background: none;
+      border: none;
+      color: rgba(245,240,232,0.6);
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+    }
+    nav button:hover { color: var(--cream); }
+    nav button.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+
+    /* MAIN LAYOUT */
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+
+    .section { display: none; }
+    .section.active { display: block; }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 0.4rem;
+      border-left: 4px solid var(--gold);
+      padding-left: 0.85rem;
+    }
+    .section-subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 2rem;
+      padding-left: 1.15rem;
+    }
+
+    /* CARDS */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.5rem;
+      position: relative;
+      transition: transform 0.15s, box-shadow 0.15s;
+      cursor: default;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(13,27,42,0.1);
+    }
+
+    .card-num {
+      position: absolute;
+      top: 1.1rem; right: 1.25rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    .card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      color: var(--navy);
+      padding-right: 2rem;
+    }
+
+    .card p { font-size: 0.88rem; color: #444; }
+
+    .tag {
+      display: inline-block;
+      margin-top: 0.85rem;
+      padding: 0.2rem 0.65rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      border-radius: 2px;
+    }
+    .tag.red { background: #fde8eb; color: var(--red); }
+    .tag.blue { background: #ddeef8; color: var(--light-blue); }
+    .tag.gold { background: #fdf4e0; color: #8a6a10; }
+
+    /* AMENDMENTS TABLE */
+    .amend-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      background: white;
+      border: 1px solid var(--border);
+    }
+    .amend-table th {
+      background: var(--navy);
+      color: var(--cream);
+      text-align: left;
+      padding: 0.75rem 1rem;
+      font-family: 'Source Serif 4', serif;
+      font-weight: 600;
+      font-size: 0.78rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+    .amend-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .amend-table tr:last-child td { border-bottom: none; }
+    .amend-table tr:nth-child(even) td { background: #faf7f2; }
+    .amend-num {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      color: var(--red);
+      white-space: nowrap;
+    }
+
+    /* VOCAB */
+    .vocab-grid {
+      display: grid;
+      gap: 0.75rem;
+    }
+    .vocab-item {
+      background: white;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--light-blue);
+      padding: 1rem 1.25rem;
+      border-radius: 0 4px 4px 0;
+    }
+    .vocab-item dt {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--navy);
+      margin-bottom: 0.25rem;
+    }
+    .vocab-item dd { font-size: 0.87rem; color: #444; }
+
+    /* QUIZ */
+    .quiz-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .quiz-q {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 1rem;
+    }
+    .quiz-options { display: flex; flex-direction: column; gap: 0.5rem; }
+    .quiz-options label {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      cursor: pointer;
+      padding: 0.6rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      font-size: 0.88rem;
+      transition: background 0.15s;
+    }
+    .quiz-options label:hover { background: #f5f0e8; }
+    .quiz-options input { margin-top: 3px; accent-color: var(--light-blue); }
+    .quiz-options label.correct { background: #d4edda; border-color: #2d7a4f; color: #1a4d30; }
+    .quiz-options label.incorrect { background: #fde8eb; border-color: var(--red); color: var(--red); }
+
+    .check-btn {
+      margin-top: 1rem;
+      background: var(--navy);
+      color: var(--cream);
+      border: none;
+      padding: 0.65rem 1.5rem;
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .check-btn:hover { background: var(--blue); }
+
+    .quiz-feedback {
+      margin-top: 0.75rem;
+      font-size: 0.85rem;
+      font-style: italic;
+      min-height: 1.2em;
+      color: var(--muted);
+    }
+
+    /* BRANCHES LAYOUT */
+    .branches {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+    .branch {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.5rem;
+    }
+    .branch-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .branch h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: var(--navy);
+    }
+    .branch ul { list-style: none; }
+    .branch ul li {
+      font-size: 0.86rem;
+      padding: 0.35rem 0;
+      border-bottom: 1px solid #f0ece4;
+      color: #333;
+    }
+    .branch ul li:last-child { border-bottom: none; }
+    .branch ul li::before { content: "→ "; color: var(--gold); font-weight: 700; }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-style: italic;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 600px) {
+      .amend-table th:last-child, .amend-table td:last-child { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="stars">★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★ ★</div>
+  <h1>AP <span>Government</span> &amp; Politics</h1>
+  <p>Comprehensive Review Guide · United States</p>
+  <div class="exam-badge">Exam Prep</div>
+</header>
+
+<nav>
+  <button class="active" onclick="showTab('foundations')">Foundations</button>
+  <button onclick="showTab('branches')">Branches</button>
+  <button onclick="showTab('amendments')">Amendments</button>
+  <button onclick="showTab('vocab')">Key Terms</button>
+  <button onclick="showTab('quiz')">Practice Quiz</button>
+</nav>
+
+<main>
+
+  <!-- FOUNDATIONS -->
+  <section id="foundations" class="section active">
+    <h2 class="section-title">Constitutional Foundations</h2>
+    <p class="section-subtitle">Core principles that structure American democracy</p>
+    <div class="cards">
+      <div class="card">
+        <span class="card-num">01</span>
+        <h3>Popular Sovereignty</h3>
+        <p>Government authority is derived from the consent of the governed. The people hold ultimate political power and delegate it to elected representatives.</p>
+        <span class="tag gold">Principle</span>
+      </div>
+      <div class="card">
+        <span class="card-num">02</span>
+        <h3>Separation of Powers</h3>
+        <p>Power is divided among three co-equal branches — legislative, executive, and judicial — to prevent concentration of power in any single institution.</p>
+        <span class="tag blue">Structure</span>
+      </div>
+      <div class="card">
+        <span class="card-num">03</span>
+        <h3>Checks &amp; Balances</h3>
+        <p>Each branch has specific powers to limit the others. Congress can override vetoes; the President nominates judges; courts can strike down laws via judicial review.</p>
+        <span class="tag blue">Structure</span>
+      </div>
+      <div class="card">
+        <span class="card-num">04</span>
+        <h3>Federalism</h3>
+        <p>Power is shared between national and state governments. The 10th Amendment reserves non-delegated powers to the states or the people.</p>
+        <span class="tag red">Key Concept</span>
+      </div>
+      <div class="card">
+        <span class="card-num">05</span>
+        <h3>Judicial Review</h3>
+        <p>Established in <em>Marbury v. Madison</em> (1803). The Supreme Court can declare laws unconstitutional, asserting the Constitution as the supreme law of the land.</p>
+        <span class="tag red">Landmark</span>
+      </div>
+      <div class="card">
+        <span class="card-num">06</span>
+        <h3>Limited Government</h3>
+        <p>Government power is constrained by law. No person or institution is above the Constitution. The Bill of Rights specifically restricts government action.</p>
+        <span class="tag gold">Principle</span>
+      </div>
+      <div class="card">
+        <span class="card-num">07</span>
+        <h3>Republicanism</h3>
+        <p>Citizens elect representatives to govern on their behalf rather than exercising direct democracy. Promotes stability and deliberation in lawmaking.</p>
+        <span class="tag gold">Principle</span>
+      </div>
+      <div class="card">
+        <span class="card-num">08</span>
+        <h3>Supremacy Clause</h3>
+        <p>Article VI declares the Constitution and federal laws the "supreme law of the land," taking precedence over conflicting state laws (McCulloch v. Maryland).</p>
+        <span class="tag blue">Structure</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRANCHES -->
+  <section id="branches" class="section">
+    <h2 class="section-title">The Three Branches</h2>
+    <p class="section-subtitle">Structure and key powers of each branch of the federal government</p>
+    <div class="branches">
+      <div class="branch">
+        <div class="branch-icon">🏛️</div>
+        <h3>Legislative (Congress)</h3>
+        <ul>
+          <li>Bicameral: Senate &amp; House</li>
+          <li>Pass federal laws</li>
+          <li>Control the federal budget</li>
+          <li>Declare war</li>
+          <li>Override presidential vetoes (2/3 vote)</li>
+          <li>Senate confirms appointments</li>
+          <li>Senate ratifies treaties (2/3)</li>
+          <li>Power of impeachment</li>
+          <li>Senate: 6-yr terms, 2/state</li>
+          <li>House: 2-yr terms, proportional</li>
+        </ul>
+      </div>
+      <div class="branch">
+        <div class="branch-icon">🦅</div>
+        <h3>Executive (President)</h3>
+        <ul>
+          <li>4-year terms, max 2 terms (22nd)</li>
+          <li>Commander-in-Chief</li>
+          <li>Veto legislation</li>
+          <li>Issue executive orders</li>
+          <li>Appoint federal judges</li>
+          <li>Negotiate treaties</li>
+          <li>Grant pardons</li>
+          <li>State of the Union</li>
+          <li>Cabinet &amp; federal agencies</li>
+          <li>Electoral College election</li>
+        </ul>
+      </div>
+      <div class="branch">
+        <div class="branch-icon">⚖️</div>
+        <h3>Judicial (Courts)</h3>
+        <ul>
+          <li>Supreme Court + lower courts</li>
+          <li>9 justices (not fixed by Constitution)</li>
+          <li>Lifetime appointments</li>
+          <li>Judicial review of laws</li>
+          <li>Interpret the Constitution</li>
+          <li>Original &amp; appellate jurisdiction</li>
+          <li>Writ of certiorari</li>
+          <li>Rule of 4 to grant cert</li>
+          <li>Majority, concurring, dissent opinions</li>
+          <li>Stare decisis (precedent)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- AMENDMENTS -->
+  <section id="amendments" class="section">
+    <h2 class="section-title">Key Constitutional Amendments</h2>
+    <p class="section-subtitle">The Bill of Rights and landmark amendments to know for the exam</p>
+    <table class="amend-table">
+      <thead>
+        <tr>
+          <th>Amendment</th>
+          <th>Rights / Changes</th>
+          <th>Key Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="amend-num">1st</span></td><td>Freedom of religion, speech, press, assembly, petition</td><td>Most litigated amendment</td></tr>
+        <tr><td><span class="amend-num">2nd</span></td><td>Right to keep and bear arms</td><td><em>Heller v. DC</em> (2008)</td></tr>
+        <tr><td><span class="amend-num">4th</span></td><td>Protection from unreasonable search and seizure</td><td>Requires probable cause &amp; warrants</td></tr>
+        <tr><td><span class="amend-num">5th</span></td><td>Due process, no self-incrimination, double jeopardy</td><td>"Pleading the Fifth"</td></tr>
+        <tr><td><span class="amend-num">6th</span></td><td>Right to speedy trial, jury, counsel</td><td><em>Gideon v. Wainwright</em></td></tr>
+        <tr><td><span class="amend-num">8th</span></td><td>No cruel and unusual punishment; no excessive bail</td><td>Death penalty cases</td></tr>
+        <tr><td><span class="amend-num">10th</span></td><td>Powers not delegated to U.S. reserved to states/people</td><td>Foundation of federalism</td></tr>
+        <tr><td><span class="amend-num">13th</span></td><td>Abolition of slavery (1865)</td><td>Post-Civil War</td></tr>
+        <tr><td><span class="amend-num">14th</span></td><td>Citizenship, equal protection, due process (1868)</td><td>Incorporation doctrine</td></tr>
+        <tr><td><span class="amend-num">15th</span></td><td>Voting rights regardless of race (1870)</td><td>Reconstruction era</td></tr>
+        <tr><td><span class="amend-num">17th</span></td><td>Direct election of U.S. Senators (1913)</td><td>Previously chosen by state legislatures</td></tr>
+        <tr><td><span class="amend-num">19th</span></td><td>Women's right to vote (1920)</td><td>Suffrage movement victory</td></tr>
+        <tr><td><span class="amend-num">22nd</span></td><td>Presidential term limits: max 2 terms (1951)</td><td>Response to FDR's 4 terms</td></tr>
+        <tr><td><span class="amend-num">25th</span></td><td>Presidential succession and disability (1967)</td><td>Post-JFK assassination</td></tr>
+        <tr><td><span class="amend-num">26th</span></td><td>Voting age lowered to 18 (1971)</td><td>Vietnam War protests</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- VOCAB -->
+  <section id="vocab" class="section">
+    <h2 class="section-title">Key Vocabulary</h2>
+    <p class="section-subtitle">Essential terms for free-response and multiple choice</p>
+    <dl class="vocab-grid">
+      <div class="vocab-item"><dt>Bicameralism</dt><dd>A legislature divided into two chambers. The U.S. Congress is composed of the Senate and the House of Representatives.</dd></div>
+      <div class="vocab-item"><dt>Filibuster</dt><dd>A Senate tactic to delay or block a vote by extending debate indefinitely. Requires 60 votes (cloture) to end.</dd></div>
+      <div class="vocab-item"><dt>Cloture</dt><dd>A Senate procedure to end debate (filibuster) with a vote of 60 of 100 senators.</dd></div>
+      <div class="vocab-item"><dt>Gerrymandering</dt><dd>Manipulating district boundaries to favor a particular political party or group. Named after Governor Elbridge Gerry.</dd></div>
+      <div class="vocab-item"><dt>Pork Barrel Legislation</dt><dd>Government spending directed at specific districts to benefit constituents and gain political support.</dd></div>
+      <div class="vocab-item"><dt>Iron Triangle</dt><dd>The stable policy-making relationship between congressional committees, executive agencies, and interest groups.</dd></div>
+      <div class="vocab-item"><dt>Mandate</dt><dd>A requirement imposed by the federal government on state or local governments, sometimes without funding (unfunded mandate).</dd></div>
+      <div class="vocab-item"><dt>Incumbent</dt><dd>The current holder of a political office. Incumbents have a significant electoral advantage due to name recognition and resources.</dd></div>
+      <div class="vocab-item"><dt>Writ of Certiorari</dt><dd>An order from a higher court to review a lower court's decision. The Supreme Court grants cert to about 1–2% of petitions.</dd></div>
+      <div class="vocab-item"><dt>Amicus Curiae</dt><dd>"Friend of the court." A brief filed by a non-party (like an interest group) offering relevant information or arguments.</dd></div>
+      <div class="vocab-item"><dt>Selective Incorporation</dt><dd>The process by which the 14th Amendment is used to apply Bill of Rights protections to the states on a case-by-case basis.</dd></div>
+      <div class="vocab-item"><dt>Political Socialization</dt><dd>The process by which individuals develop their political beliefs and values through family, school, peers, and media.</dd></div>
+      <div class="vocab-item"><dt>Linkage Institutions</dt><dd>Mechanisms that connect citizens to government: political parties, elections, interest groups, and media.</dd></div>
+      <div class="vocab-item"><dt>Realignment</dt><dd>A dramatic shift in the political coalition supporting a party, often triggered by a critical election (e.g., 1932 New Deal coalition).</dd></div>
+    </dl>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz" class="section">
+    <h2 class="section-title">Practice Quiz</h2>
+    <p class="section-subtitle">Test your knowledge — select an answer and check it</p>
+
+    <div class="quiz-card" id="q1">
+      <p class="quiz-q">1. Which case established the principle of judicial review?</p>
+      <div class="quiz-options">
+        <label><input type="radio" name="q1" value="a"> McCulloch v. Maryland (1819)</label>
+        <label><input type="radio" name="q1" value="b"> Marbury v. Madison (1803)</label>
+        <label><input type="radio" name="q1" value="c"> Gibbons v. Ogden (1824)</label>
+        <label><input type="radio" name="q1" value="d"> United States v. Lopez (1995)</label>
+      </div>
+      <button class="check-btn" onclick="checkQuiz('q1','b','Correct! Marbury v. Madison (1803) — Chief Justice John Marshall established judicial review.','Incorrect. Marbury v. Madison (1803) established judicial review — the Court\'s power to strike down unconstitutional laws.')">Check Answer</button>
+      <p class="quiz-feedback" id="q1-feedback"></p>
+    </div>
+
+    <div class="quiz-card" id="q2">
+      <p class="quiz-q">2. How many votes are required in the Senate to invoke cloture (end a filibuster)?</p>
+      <div class="quiz-options">
+        <label><input type="radio" name="q2" value="a"> Simple majority (51)</label>
+        <label><input type="radio" name="q2" value="b"> Two-thirds majority (67)</label>
+        <label><input type="radio" name="q2" value="c"> Three-fifths majority (60)</label>
+        <label><input type="radio" name="q2" value="d"> Three-fourths majority (75)</label>
+      </div>
+      <button class="check-btn" onclick="checkQuiz('q2','c','Correct! Cloture requires 60 votes (three-fifths of the Senate) to end debate.','Incorrect. Cloture requires 60 votes — a three-fifths supermajority of the 100-member Senate.')">Check Answer</button>
+      <p class="quiz-feedback" id="q2-feedback"></p>
+    </div>
+
+    <div class="quiz-card" id="q3">
+      <p class="quiz-q">3. The 14th Amendment is most significant for AP Gov because it:</p>
+      <div class="quiz-options">
+        <label><input type="radio" name="q3" value="a"> Abolished slavery throughout the United States</label>
+        <label><input type="radio" name="q3" value="b"> Granted women the right to vote</label>
+        <label><input type="radio" name="q3" value="c"> Applied Bill of Rights protections to states through incorporation</label>
+        <label><input type="radio" name="q3" value="d"> Set term limits for the President</label>
+      </div>
+      <button class="check-btn" onclick="checkQuiz('q3','c','Correct! The 14th Amendment\'s due process and equal protection clauses allow selective incorporation of the Bill of Rights to the states.','Incorrect. While it granted citizenship and equal protection, the 14th Amendment is most significant for enabling selective incorporation — applying the Bill of Rights to state governments.')">Check Answer</button>
+      <p class="quiz-feedback" id="q3-feedback"></p>
+    </div>
+
+    <div class="quiz-card" id="q4">
+      <p class="quiz-q">4. Which of the following best describes the "iron triangle"?</p>
+      <div class="quiz-options">
+        <label><input type="radio" name="q4" value="a"> The relationship between the three branches of government</label>
+        <label><input type="radio" name="q4" value="b"> A policy-making alliance among congressional committees, agencies, and interest groups</label>
+        <label><input type="radio" name="q4" value="c"> The process of a bill becoming a law</label>
+        <label><input type="radio" name="q4" value="d"> The three requirements to run for President</label>
+      </div>
+      <button class="check-btn" onclick="checkQuiz('q4','b','Correct! The iron triangle describes the mutually beneficial relationship between congressional committees, executive agencies, and interest groups.','Incorrect. The iron triangle is a stable policy-making network connecting congressional committees, federal agencies, and interest groups — each supporting the others.')">Check Answer</button>
+      <p class="quiz-feedback" id="q4-feedback"></p>
+    </div>
+
+    <div class="quiz-card" id="q5">
+      <p class="quiz-q">5. Under the Constitution, which power is exclusively granted to the Senate?</p>
+      <div class="quiz-options">
+        <label><input type="radio" name="q5" value="a"> Originating revenue bills</label>
+        <label><input type="radio" name="q5" value="b"> Declaring war</label>
+        <label><input type="radio" name="q5" value="c"> Ratifying treaties with foreign nations</label>
+        <label><input type="radio" name="q5" value="d"> Overriding presidential vetoes</label>
+      </div>
+      <button class="check-btn" onclick="checkQuiz('q5','c','Correct! The Senate alone ratifies treaties with a two-thirds vote. Revenue bills must originate in the House, and war declarations and veto overrides require both chambers.','Incorrect. Ratifying treaties is a Senate-exclusive power requiring a two-thirds vote. Revenue bills originate in the House; war declarations and veto overrides involve both chambers.')">Check Answer</button>
+      <p class="quiz-feedback" id="q5-feedback"></p>
+    </div>
+
+  </section>
+</main>
+
+<footer>
+  AP Government &amp; Politics Review · Study Guide · Good luck on your exam!
+</footer>
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  function checkQuiz(qId, correct, successMsg, failMsg) {
+    const selected = document.querySelector(`input[name="${qId}"]:checked`);
+    const feedback = document.getElementById(`${qId}-feedback`);
+    const labels = document.querySelectorAll(`#${qId} .quiz-options label`);
+
+    labels.forEach(l => l.classList.remove('correct','incorrect'));
+
+    if (!selected) {
+      feedback.textContent = 'Please select an answer first.';
+      feedback.style.color = '#666';
+      return;
+    }
+
+    labels.forEach(l => {
+      const radio = l.querySelector('input');
+      if (radio.value === correct) l.classList.add('correct');
+      else if (radio.checked) l.classList.add('incorrect');
+    });
+
+    if (selected.value === correct) {
+      feedback.textContent = '✓ ' + successMsg;
+      feedback.style.color = '#2d7a4f';
+    } else {
+      feedback.textContent = '✗ ' + failMsg;
+      feedback.style.color = '#9b2335';
+    }
+  }
+</script>
+</body>
+</html>
